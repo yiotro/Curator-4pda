@@ -27,6 +27,9 @@ public interface RulesController extends RulesModelListener {
     void editRules(ArrayList<Rule> rules);
 
 
+    void copyMultipleRulesToClipboard(ArrayList<Rule> rules);
+
+
     void onListItemClicked(int position);
 
 

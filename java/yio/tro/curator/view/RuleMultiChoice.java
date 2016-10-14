@@ -1,6 +1,8 @@
 package yio.tro.curator.view;
 
+import android.content.DialogInterface;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.Menu;
@@ -45,17 +47,49 @@ public class RuleMultiChoice extends MultiChoiceYio{
     public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
         createSelectedRules();
 
-        if (menuItem.getItemId() == R.id.cab_rule_delete) {
-            rulesController.deleteRules(selectedRules);
-        }
-
-        if (menuItem.getItemId() == R.id.cab_rule_edit) {
-            rulesController.editRules(selectedRules);
+        switch (menuItem.getItemId()) {
+            case R.id.cab_rule_delete:
+                onCabDeleteRules();
+                break;
+            case R.id.cab_rule_edit:
+                rulesController.editRules(selectedRules);
+                break;
+            case R.id.cab_rule_paste:
+                rulesController.copyMultipleRulesToClipboard(selectedRules);
+                break;
         }
 
         actionMode.finish();
 
         return false;
+    }
+
+
+    private void onCabDeleteRules() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mainActivity);
+
+        builder.setTitle(R.string.deletion);
+        builder.setMessage(R.string.delete_rules_question);
+
+        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                rulesController.deleteRules(selectedRules);
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Do nothing
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
 

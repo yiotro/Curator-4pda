@@ -278,20 +278,21 @@ public class RulesModel {
         // string builder for clipboard
         StringBuilder stringBuilder = new StringBuilder();
 
-        // initial tag
-        String tag = defaultSharedPreferences.getString("general_pref_tag", context.getResources().getString(R.string.default_tag));
-        stringBuilder.append("[").append(tag).append("]\n");
-
-        // add welcome phrase
-        String welcomePhrase = defaultSharedPreferences.getString("general_pref_welcome_phrase", context.getResources().getString(R.string.default_welcome_phrase));
-        if (welcomePhrase.length() > 0) {
-            stringBuilder.append(welcomePhrase).append("\n");
-        }
-
-        // add rule text itself
-        String textSize = defaultSharedPreferences.getString("general_pref_text_size", "1");
-        stringBuilder.append("[size=").append(textSize).append("]");
+        beginBuildClipData(context, defaultSharedPreferences, stringBuilder);
         stringBuilder.append(rule.getText());
+        endBuildClipData(context, defaultSharedPreferences, stringBuilder);
+
+        // copy to clipboard
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("cur", stringBuilder.toString());
+        clipboard.setPrimaryClip(clip);
+
+        // make toast about this
+        Toast.makeText(context.getApplicationContext(), rule.getTitle(), Toast.LENGTH_SHORT).show();
+    }
+
+
+    private void endBuildClipData(Context context, SharedPreferences defaultSharedPreferences, StringBuilder stringBuilder) {
         stringBuilder.append("[/size]").append("\n");
 
         // add ending phrase
@@ -301,7 +302,49 @@ public class RulesModel {
         }
 
         // final tag
-        stringBuilder.append("[/").append(tag).append("]\n");
+        String tag = defaultSharedPreferences.getString("general_pref_tag", context.getResources().getString(R.string.default_tag));
+        if (tag.length() > 0) {
+            stringBuilder.append("[/").append(tag).append("]\n");
+        }
+    }
+
+
+    private void beginBuildClipData(Context context, SharedPreferences defaultSharedPreferences, StringBuilder stringBuilder) {
+        String tag = defaultSharedPreferences.getString("general_pref_tag", context.getResources().getString(R.string.default_tag));
+        if (tag.length() > 0) {
+            stringBuilder.append("[").append(tag).append("]\n");
+        }
+
+        // add welcome phrase
+        String welcomePhrase = defaultSharedPreferences.getString("general_pref_welcome_phrase", context.getResources().getString(R.string.default_welcome_phrase));
+        if (welcomePhrase.length() > 0) {
+            stringBuilder.append(welcomePhrase).append("\n");
+        }
+
+        String textSize = defaultSharedPreferences.getString("general_pref_text_size", "1");
+        stringBuilder.append("[size=").append(textSize).append("]");
+    }
+
+
+    /**
+     * Same as copyToClipboard() but copies multiple rules
+     * @param context used to get string resources
+     * @param rules selected rules
+     */
+    public void copyMultipleRulesToClipboard(Context context, ArrayList<Rule> rules) {
+        // get touched rule
+        SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+        // string builder for clipboard
+        StringBuilder stringBuilder = new StringBuilder();
+
+        beginBuildClipData(context, defaultSharedPreferences, stringBuilder);
+
+        for (Rule rule : rules) {
+            stringBuilder.append(rule.getText()).append("\n");
+        }
+
+        endBuildClipData(context, defaultSharedPreferences, stringBuilder);
 
         // copy to clipboard
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
@@ -309,7 +352,11 @@ public class RulesModel {
         clipboard.setPrimaryClip(clip);
 
         // make toast about this
-        Toast.makeText(context.getApplicationContext(), rule.getTitle(), Toast.LENGTH_SHORT).show();
+        StringBuilder titleBuilder = new StringBuilder();
+        for (Rule rule : rules) {
+            titleBuilder.append(rule.getTitle()).append("\n");
+        }
+        Toast.makeText(context.getApplicationContext(), titleBuilder.toString(), Toast.LENGTH_SHORT).show();
     }
 
 

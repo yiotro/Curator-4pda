@@ -75,6 +75,12 @@ public class RulesControllerImpl implements RulesController {
 
 
     @Override
+    public void copyMultipleRulesToClipboard(ArrayList<Rule> rules) {
+        rulesModel.copyMultipleRulesToClipboard(mainActivity, rules);
+    }
+
+
+    @Override
     public void onListItemClicked(int position) {
         Rule rule = rulesModel.getRules().get(position);
         rulesModel.copyToClipboard(mainActivity, rule);

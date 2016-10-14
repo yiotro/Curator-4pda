@@ -123,7 +123,7 @@
 
 -Изображение под спойлер\n
 Все графические изображения необходимо убирать под спойлер! \n
-        [url=http://4pda.ru/forum/index.php?showtopic=353146&amp;view=findpost&amp;p=14041004]Как убрать изображение под спойлер[/url]\n
+        [url=http://4pda.ru/forum/index.php?showtopic=353146]Как убрать изображение под спойлер[/url]\n
 
 -Выбор и сравнение\n
 1.4 Не забывайте, что для выбора и сравнения существует отдельный раздел форума [url=http://4pda.ru/forum/index.php?showforum=93][b]Выбор и сравнение[/b][/url].\n
@@ -148,6 +148,8 @@
     <string name="list_look">List look</string>
     <string name="ending_phrase">Ending phrase</string>
     <string name="welcome_phrase">Welcome phrase</string>
+    <string name="delete_rules_question">Really delete rules?</string>
+    <string name="paste">Paste</string>
     <string-array name="list_look_entries">
         <item>Default</item>
         <item>Compact</item>
