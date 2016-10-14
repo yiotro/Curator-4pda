@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--nothing here by default-->
+    <!--added dynamically later in code-->
+
+    <group
+            android:id="@+id/drawer_group">
+
+    </group>
+
+</menu>

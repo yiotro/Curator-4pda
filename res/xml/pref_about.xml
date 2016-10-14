@@ -1,0 +1,13 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Preference
+            android:key="about_author"
+            android:title="Author"
+            android:summary="yiotro"/>
+
+    <Preference
+            android:key="about_email"
+            android:title="E-mail"
+            android:summary="yiotro93@gmail.com"/>
+
+</PreferenceScreen>

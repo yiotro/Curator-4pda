@@ -1,0 +1,31 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+            android:key="general_pref_welcome_phrase"
+            android:title="@string/welcome_phrase"
+            android:defaultValue="@string/default_welcome_phrase"/>
+
+    <EditTextPreference
+            android:key="general_pref_ending_phrase"
+            android:title="@string/ending_phrase"
+            android:defaultValue=""/>
+
+    <ListPreference
+            android:key="general_pref_list_look"
+            android:entries="@array/list_look_entries"
+            android:entryValues="@array/list_look_values"
+            android:defaultValue="1"
+            android:summary="%s"
+            android:title="@string/list_look"/>
+
+    <EditTextPreference
+            android:key="general_pref_text_size"
+            android:title="@string/text_size"
+            android:defaultValue="1"/>
+
+    <EditTextPreference
+            android:key="general_pref_tag"
+            android:title="@string/tag"
+            android:defaultValue="@string/default_tag"/>
+
+</PreferenceScreen>

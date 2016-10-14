@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:fitsSystemWindows="true"
+        tools:context="yio.tro.curator.view.ExportImportActivity">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/this_button_will_export_your_section_to_clipboard"
+            android:id="@+id/export_label"
+            android:layout_marginTop="25dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"/>
+
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/export"
+            android:id="@+id/button_export_section"
+            android:layout_below="@+id/export_label"
+            android:onClick="OnExportButtonClick"
+            android:layout_centerHorizontal="true"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/this_button_will_import_section_from_clipboard"
+            android:id="@+id/import_label"
+            android:layout_below="@+id/button_export_section"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"/>
+
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/import_button"
+            android:id="@+id/button_import"
+            android:onClick="onImportButtonClick"
+            android:layout_below="@+id/import_label"
+            android:layout_centerHorizontal="true"/>
+</RelativeLayout>
