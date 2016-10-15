@@ -41,7 +41,13 @@ public class DefaultListAdapter extends ArrayAdapter<Rule>{
         }
 
         Rule rule = getItem(position);
-        viewHolder.viewTitle.setText(rule.getTitle());
+        String tag = "";
+        if (rule.hasTag()) {
+            tag = "<" + rule.getTag() + "> ";
+        }
+
+        String fullTitle = tag + rule.getTitle();
+        viewHolder.viewTitle.setText(fullTitle);
         viewHolder.viewRuleText.setText(rule.getText());
 
         return convertView;

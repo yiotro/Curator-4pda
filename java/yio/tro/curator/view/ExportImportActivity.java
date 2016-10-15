@@ -2,9 +2,12 @@ package yio.tro.curator.view;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import yio.tro.curator.R;
+import yio.tro.curator.controller.RulesController;
+import yio.tro.curator.controller.RulesControllerImpl;
 import yio.tro.curator.model.RulesModel;
 
 public class ExportImportActivity extends AppCompatActivity {
@@ -21,9 +24,18 @@ public class ExportImportActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.action_toolbar_export_base:
+                RulesControllerImpl.getInstance().exportFullBase(this);
+                finish();
+                return true;
+            case R.id.action_toolbar_import_base:
+                RulesControllerImpl.getInstance().importFullBase(this);
+                finish();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -31,17 +43,22 @@ public class ExportImportActivity extends AppCompatActivity {
 
 
     public void OnExportButtonClick(View view) {
-        RulesModel rulesModel = RulesModel.getInstance();
-        rulesModel.exportCurrentSectionToClipboard(this);
+        RulesControllerImpl.getInstance().exportSection(this);
 
         finish();
     }
 
 
     public void onImportButtonClick(View view) {
-        RulesModel rulesModel = RulesModel.getInstance();
-        rulesModel.importCurrentSectionFromClipboard(this);
+        RulesControllerImpl.getInstance().importSection(this);
 
         finish();
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_export_import, menu);
+        return true;
     }
 }

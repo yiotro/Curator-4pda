@@ -148,6 +148,12 @@
     <string name="welcome_phrase">Приветственная фраза</string>
     <string name="delete_rules_question">Действительно удалить правила?</string>
     <string name="paste">Копировать</string>
+    <string name="export_full_base">Экспорт всей базы</string>
+    <string name="import_full_base">Импорт всей базы</string>
+    <string name="exported_full_base">Вся база экспортирована</string>
+    <string name="cant_get_data_from_clipboard">Не удается получить данные из буфера обмена</string>
+    <string name="imported_full_base">Вся база импортирована</string>
+    <string name="rule_tag">Тэг (опционально)</string>
     <string-array name="list_look_entries">
         <item>По умолчанию</item>
         <item>Компактный</item>

@@ -17,12 +17,12 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/rule_title"
             android:id="@+id/add_rule_title_view"
+            android:layout_marginTop="26dp"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="50dp"/>
+            android:layout_centerHorizontal="true"/>
 
     <EditText
-            android:layout_width="200dp"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:id="@+id/add_rule_edit_title"
@@ -35,16 +35,33 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/text"
             android:id="@+id/add_rule_text_view"
-            android:layout_below="@+id/add_rule_edit_title"
+            android:layout_below="@+id/add_rule_tag_edit"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="75dp"/>
+            android:layout_marginTop="30dp"/>
 
     <EditText
-            android:layout_width="250dp"
+            android:layout_width="320dp"
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
             android:maxLines="6"
             android:id="@+id/add_rule_edit_text"
             android:layout_below="@+id/add_rule_text_view"
+            android:layout_centerHorizontal="true"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/rule_tag"
+            android:id="@+id/add_rule_tag_view"
+            android:layout_below="@+id/add_rule_edit_title"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp"/>
+
+    <EditText
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/add_rule_tag_edit"
+            android:layout_below="@+id/add_rule_tag_view"
             android:layout_centerHorizontal="true"/>
 </RelativeLayout>

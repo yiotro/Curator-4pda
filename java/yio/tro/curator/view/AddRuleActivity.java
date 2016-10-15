@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import yio.tro.curator.R;
 import yio.tro.curator.controller.RulesControllerImpl;
@@ -43,7 +44,10 @@ public class AddRuleActivity extends AppCompatActivity {
         EditText editText = (EditText) findViewById(R.id.add_rule_edit_text);
         String text = editText.getText().toString();
 
-        RulesControllerImpl.getInstance().addRule(title, text);
+        EditText editTag = (EditText) findViewById(R.id.add_rule_tag_edit);
+        String tag = editTag.getText().toString();
+
+        RulesControllerImpl.getInstance().addRule(title, text, tag);
 
         finish();
     }

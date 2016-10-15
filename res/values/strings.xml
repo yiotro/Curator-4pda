@@ -150,6 +150,12 @@
     <string name="welcome_phrase">Welcome phrase</string>
     <string name="delete_rules_question">Really delete rules?</string>
     <string name="paste">Paste</string>
+    <string name="export_full_base">Export full base</string>
+    <string name="import_full_base">Import full base</string>
+    <string name="exported_full_base">Exported full base</string>
+    <string name="cant_get_data_from_clipboard">Can\'t get data from clipboard</string>
+    <string name="imported_full_base">Imported full base</string>
+    <string name="rule_tag">Tag</string>
     <string-array name="list_look_entries">
         <item>Default</item>
         <item>Compact</item>

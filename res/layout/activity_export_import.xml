@@ -48,4 +48,5 @@
             android:onClick="onImportButtonClick"
             android:layout_below="@+id/import_label"
             android:layout_centerHorizontal="true"/>
+
 </RelativeLayout>

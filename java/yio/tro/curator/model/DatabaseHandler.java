@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 12;
+    private static final int DATABASE_VERSION = 14;
     private static final String DATABASE_NAME = "curator.db";
     public static final String TABLE_SECTIONS = "sections";
     public static final String TABLE_RULES = "rules";
@@ -19,6 +19,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public static final String COLUMN_SECTION_NAME = "_name";
     public static final String COLUMN_RULE_TITLE = "_title";
     public static final String COLUMN_RULE_TEXT = "_text";
+    public static final String COLUMN_RULE_TAG = "_tag";
 
 
     public DatabaseHandler(Context context, SQLiteDatabase.CursorFactory factory) {
@@ -40,7 +41,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String queryNewTable = "create table " + TABLE_RULES + section.getId() + "(" +
                 COLUMN_ID + " integer primary key autoincrement," +
                 COLUMN_RULE_TITLE + " text," +
-                COLUMN_RULE_TEXT + " text" +
+                COLUMN_RULE_TEXT + " text," +
+                COLUMN_RULE_TAG + " text" +
                 ");";
         db.execSQL(queryNewTable);
 
@@ -70,6 +72,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(COLUMN_ID, rule.getId());
         values.put(COLUMN_RULE_TITLE, rule.getTitle());
         values.put(COLUMN_RULE_TEXT, rule.getText());
+        values.put(COLUMN_RULE_TAG, rule.getTag());
         db.insert(TABLE_RULES + section.getId(), null, values);
 
         db.close();
@@ -83,6 +86,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(COLUMN_RULE_TITLE, rule.getTitle());
         values.put(COLUMN_RULE_TEXT, rule.getText());
+        values.put(COLUMN_RULE_TAG, rule.getTag());
         db.update(TABLE_RULES + section.getId(), values, COLUMN_ID + "=?", new String[]{rule.getId() + ""});
 
         db.close();
@@ -131,6 +135,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             Rule rule = new Rule(c.getInt(c.getColumnIndex(COLUMN_ID)));
             rule.setTitle(c.getString(c.getColumnIndex(COLUMN_RULE_TITLE)));
             rule.setText(c.getString(c.getColumnIndex(COLUMN_RULE_TEXT)));
+            rule.setTag(c.getString(c.getColumnIndex(COLUMN_RULE_TAG)));
             result.add(rule);
             c.moveToNext();
         }
@@ -156,7 +161,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.d("yiotro", "on upgrade");
+        dropAllTables(db);
 
+        onCreate(db);
+    }
+
+
+    public void clearDatabase() {
+        dropAllTables(getWritableDatabase());
+        onCreate(getWritableDatabase());
+    }
+
+
+    private void dropAllTables(SQLiteDatabase db) {
         // drop all rules tables
         String query = "select * from " + TABLE_SECTIONS;
         Cursor c = db.rawQuery(query, null);
@@ -170,6 +187,5 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         c.close();
 
         db.execSQL("drop table if exists " + TABLE_SECTIONS);
-        onCreate(db);
     }
 }

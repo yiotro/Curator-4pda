@@ -11,6 +11,7 @@ import yio.tro.curator.R;
 
 import java.util.ArrayList;
 import java.util.ListIterator;
+import java.util.StringTokenizer;
 
 public class RulesModel {
 
@@ -99,7 +100,7 @@ public class RulesModel {
             currentSection = sections.get(0);
 
             RulesParser rulesParser = new RulesParser(this);
-            rulesParser.parse(context.getResources().getString(R.string.default_rules));
+            rulesParser.parseSection(context.getResources().getString(R.string.default_rules));
         }
     }
 
@@ -191,12 +192,13 @@ public class RulesModel {
      * @param text full text of new rule
      * @return newly created rule object
      */
-    public Rule addRule(String title, String text) {
+    public Rule addRule(String title, String text, String tag) {
         if (title.length() == 0) return null;
 
         Rule rule = new Rule(currentSection.getIdForNewRule());
         rule.setTitle(title);
         rule.setText(text);
+        rule.setTag(tag);
 
         ListIterator<Rule> iterator = currentSection.getRules().listIterator();
         while (iterator.hasNext()) iterator.next();
@@ -271,28 +273,26 @@ public class RulesModel {
      * @param context used to get string resources
      * @param rule provides a text to copy
      */
-    public void copyToClipboard(Context context, Rule rule) {
+    public void copyRuleToClipboard(Context context, Rule rule) {
         // get touched rule
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         // string builder for clipboard
         StringBuilder stringBuilder = new StringBuilder();
 
-        beginBuildClipData(context, defaultSharedPreferences, stringBuilder);
+        beginBuildClipData(context, defaultSharedPreferences, stringBuilder, rule.getTag());
         stringBuilder.append(rule.getText());
-        endBuildClipData(context, defaultSharedPreferences, stringBuilder);
+        endBuildClipData(context, defaultSharedPreferences, stringBuilder, rule.getTag());
 
         // copy to clipboard
-        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("cur", stringBuilder.toString());
-        clipboard.setPrimaryClip(clip);
+        copyToClipboard(context, stringBuilder.toString());
 
         // make toast about this
-        Toast.makeText(context.getApplicationContext(), rule.getTitle(), Toast.LENGTH_SHORT).show();
+        showToast(context, rule.getTitle());
     }
 
 
-    private void endBuildClipData(Context context, SharedPreferences defaultSharedPreferences, StringBuilder stringBuilder) {
+    private void endBuildClipData(Context context, SharedPreferences defaultSharedPreferences, StringBuilder stringBuilder, String customTag) {
         stringBuilder.append("[/size]").append("\n");
 
         // add ending phrase
@@ -303,14 +303,20 @@ public class RulesModel {
 
         // final tag
         String tag = defaultSharedPreferences.getString("general_pref_tag", context.getResources().getString(R.string.default_tag));
+        if (customTag != null && customTag.length() > 0) {
+            tag = customTag;
+        }
         if (tag.length() > 0) {
             stringBuilder.append("[/").append(tag).append("]\n");
         }
     }
 
 
-    private void beginBuildClipData(Context context, SharedPreferences defaultSharedPreferences, StringBuilder stringBuilder) {
+    private void beginBuildClipData(Context context, SharedPreferences defaultSharedPreferences, StringBuilder stringBuilder, String customTag) {
         String tag = defaultSharedPreferences.getString("general_pref_tag", context.getResources().getString(R.string.default_tag));
+        if (customTag != null && customTag.length() > 0) {
+            tag = customTag;
+        }
         if (tag.length() > 0) {
             stringBuilder.append("[").append(tag).append("]\n");
         }
@@ -338,25 +344,23 @@ public class RulesModel {
         // string builder for clipboard
         StringBuilder stringBuilder = new StringBuilder();
 
-        beginBuildClipData(context, defaultSharedPreferences, stringBuilder);
+        beginBuildClipData(context, defaultSharedPreferences, stringBuilder, null);
 
         for (Rule rule : rules) {
             stringBuilder.append(rule.getText()).append("\n");
         }
 
-        endBuildClipData(context, defaultSharedPreferences, stringBuilder);
+        endBuildClipData(context, defaultSharedPreferences, stringBuilder, null);
 
         // copy to clipboard
-        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("cur", stringBuilder.toString());
-        clipboard.setPrimaryClip(clip);
+        copyToClipboard(context, stringBuilder.toString());
 
         // make toast about this
         StringBuilder titleBuilder = new StringBuilder();
         for (Rule rule : rules) {
             titleBuilder.append(rule.getTitle()).append("\n");
         }
-        Toast.makeText(context.getApplicationContext(), titleBuilder.toString(), Toast.LENGTH_SHORT).show();
+        showToast(context, titleBuilder.toString());
     }
 
 
@@ -365,24 +369,49 @@ public class RulesModel {
      * @param context used to get string resources
      */
     public void exportCurrentSectionToClipboard(Context context) {
-        // string builder for clipboard
+        String convertedSection = convertSectionToText(currentSection);
+
+        // copy to clipboard
+        copyToClipboard(context, convertedSection);
+
+        // make toast about this
+        String toastMessage = currentSection.getName() + " " + context.getString(R.string.exported);
+        showToast(context, toastMessage);
+    }
+
+
+    public void showToast(Context context, String toastMessage) {
+        Toast.makeText(context.getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
+    }
+
+
+    private void copyToClipboard(Context context, String message) {
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("cur", message);
+        clipboard.setPrimaryClip(clip);
+    }
+
+
+    /**
+     * This method just converts section to text. Used for export.
+     * @param section source for conversion
+     * @return converted to text section
+     */
+    private String convertSectionToText(Section section) {
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append("[formatted]\n");
 
-        currentSection.sortRules();
-        for (Rule rule : currentSection.getRules()) {
+        section.sortRules();
+        for (Rule rule : section.getRules()) {
             stringBuilder.append("-").append(rule.getTitle()).append("\n");
+            if (rule.hasTag()) {
+                stringBuilder.append("tag ").append(rule.getTag()).append("\n");
+            }
             stringBuilder.append(rule.getText()).append("\n");
         }
 
-        // copy to clipboard
-        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("cur", stringBuilder.toString());
-        clipboard.setPrimaryClip(clip);
-
-        // make toast about this
-        Toast.makeText(context.getApplicationContext(), currentSection.getName() + " " + context.getString(R.string.exported), Toast.LENGTH_SHORT).show();
+        return stringBuilder.toString();
     }
 
 
@@ -391,26 +420,71 @@ public class RulesModel {
      * @param context used to get string resources and for clipboard manager
      */
     public void importCurrentSectionFromClipboard(Context context) {
-        // copy from clipboard
-        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        CharSequence text = null;
-        try {
-            text = clipboard.getPrimaryClip().getItemAt(0).getText();
-        } catch (Exception e) {
-            // wasn't able to copy text from import
-            Toast.makeText(context.getApplicationContext(), "Fail", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        String text = getTextFromClipboard(context);
+        if (text == null) return;
 
         RulesParser rulesParser = new RulesParser(this);
-        rulesParser.parse(text.toString());
+        rulesParser.parseSection(text);
 
         for (RulesModelListener listener : listeners) {
             listener.onRuleAdded(null);
         }
 
         // make toast about this
-        Toast.makeText(context.getApplicationContext(), currentSection.getName() + " " + context.getString(R.string.imported), Toast.LENGTH_SHORT).show();
+        showToast(context, currentSection.getName() + " " + context.getString(R.string.imported));
+    }
+
+
+    /**
+     * This method just achieves string from clipboard if possible.
+     * @param context used to get clipboard
+     * @return text from clipboard
+     */
+    private String getTextFromClipboard(Context context) {
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        CharSequence text;
+        try {
+            text = clipboard.getPrimaryClip().getItemAt(0).getText();
+        } catch (Exception e) {
+            // wasn't able to copy text from clipboard
+            showToast(context, context.getString(R.string.cant_get_data_from_clipboard));
+            return null;
+        }
+
+        return text.toString();
+    }
+
+
+    public void exportFullBase(Context context) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (int i = 0; i < sections.size(); i++) {
+            Section section = sections.get(i);
+            stringBuilder.append("section ").append(section.getName()).append("\n");
+            stringBuilder.append(convertSectionToText(section));
+            if (i < sections.size() - 1) {
+                stringBuilder.append("\n").append("---").append("\n");
+            }
+        }
+
+        copyToClipboard(context, stringBuilder.toString());
+
+        showToast(context, context.getString(R.string.exported_full_base));
+    }
+
+
+    public void importFullBase(Context context) {
+        String text = getTextFromClipboard(context);
+        if (text == null) return;
+
+        RulesParser rulesParser = new RulesParser(this);
+        rulesParser.parseFullBase(text);
+
+        for (RulesModelListener listener : listeners) {
+            listener.onRuleAdded(null);
+        }
+
+        showToast(context, context.getString(R.string.imported_full_base));
     }
 
 
@@ -485,6 +559,11 @@ public class RulesModel {
 
     public Section getCurrentSection() {
         return currentSection;
+    }
+
+
+    public DatabaseHandler getDatabaseHandler() {
+        return databaseHandler;
     }
 
 

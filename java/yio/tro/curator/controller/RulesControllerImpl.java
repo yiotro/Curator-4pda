@@ -5,7 +5,6 @@ import android.widget.Toast;
 import yio.tro.curator.R;
 import yio.tro.curator.model.Rule;
 import yio.tro.curator.model.RulesModel;
-import yio.tro.curator.model.RulesModelListener;
 import yio.tro.curator.model.Section;
 import yio.tro.curator.view.EditRuleActivity;
 import yio.tro.curator.view.MainActivity;
@@ -47,8 +46,8 @@ public class RulesControllerImpl implements RulesController {
 
 
     @Override
-    public void addRule(String title, String text) {
-        rulesModel.addRule(title, text);
+    public void addRule(String title, String text, String tag) {
+        rulesModel.addRule(title, text, tag);
     }
 
 
@@ -81,9 +80,33 @@ public class RulesControllerImpl implements RulesController {
 
 
     @Override
+    public void exportFullBase(Context context) {
+        rulesModel.exportFullBase(context);
+    }
+
+
+    @Override
+    public void importFullBase(Context context) {
+        rulesModel.importFullBase(context);
+    }
+
+
+    @Override
+    public void exportSection(Context context) {
+        rulesModel.exportCurrentSectionToClipboard(context);
+    }
+
+
+    @Override
+    public void importSection(Context context) {
+        rulesModel.importCurrentSectionFromClipboard(context);
+    }
+
+
+    @Override
     public void onListItemClicked(int position) {
         Rule rule = rulesModel.getRules().get(position);
-        rulesModel.copyToClipboard(mainActivity, rule);
+        rulesModel.copyRuleToClipboard(mainActivity, rule);
     }
 
 

@@ -1,5 +1,6 @@
 package yio.tro.curator.controller;
 
+import android.content.Context;
 import yio.tro.curator.model.Rule;
 import yio.tro.curator.model.RulesModelListener;
 import yio.tro.curator.view.MainActivity;
@@ -15,7 +16,7 @@ public interface RulesController extends RulesModelListener {
     void deleteSection();
 
 
-    void addRule(String title, String text);
+    void addRule(String title, String text, String tag);
 
 
     void editRule(Rule rule);
@@ -28,6 +29,18 @@ public interface RulesController extends RulesModelListener {
 
 
     void copyMultipleRulesToClipboard(ArrayList<Rule> rules);
+
+
+    void exportFullBase(Context context);
+
+
+    void importFullBase(Context context);
+
+
+    void exportSection(Context context);
+
+
+    void importSection(Context context);
 
 
     void onListItemClicked(int position);

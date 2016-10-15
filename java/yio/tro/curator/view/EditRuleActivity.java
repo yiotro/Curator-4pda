@@ -34,6 +34,9 @@ public class EditRuleActivity extends AppCompatActivity{
 
         EditText editText = (EditText) findViewById(R.id.add_rule_edit_text);
         editText.setText(rule.getText());
+
+        EditText editTag = (EditText) findViewById(R.id.add_rule_tag_edit);
+        editTag.setText(rule.getTag());
     }
 
 
@@ -61,6 +64,10 @@ public class EditRuleActivity extends AppCompatActivity{
         EditText editText = (EditText) findViewById(R.id.add_rule_edit_text);
         String text = editText.getText().toString();
         rule.setText(text);
+
+        EditText editTag = (EditText) findViewById(R.id.add_rule_tag_edit);
+        String tag = editTag.getText().toString();
+        rule.setTag(tag);
 
         RulesControllerImpl.getInstance().editRule(rule);
 

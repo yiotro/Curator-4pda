@@ -8,11 +8,13 @@ public class Rule implements Serializable, Comparable<Rule>{
 
     private String title;
     private String text;
+    private String tag;
     private int id;
 
 
     public Rule(int id) {
         this.id = id;
+        tag = "";
     }
 
 
@@ -20,6 +22,7 @@ public class Rule implements Serializable, Comparable<Rule>{
         id = src.id;
         title = src.title;
         text = src.text;
+        tag = src.tag;
     }
 
 
@@ -45,6 +48,21 @@ public class Rule implements Serializable, Comparable<Rule>{
 
     public int getId() {
         return id;
+    }
+
+
+    public String getTag() {
+        return tag;
+    }
+
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
+
+    public boolean hasTag() {
+        return tag != null && tag.length() > 0;
     }
 
 
