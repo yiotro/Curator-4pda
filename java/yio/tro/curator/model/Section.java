@@ -6,7 +6,7 @@ import java.util.Collections;
 public class Section {
 
 
-    private String name;
+    private String name, phrase;
     private ArrayList<Rule> rules;
     private int id;
 
@@ -62,5 +62,15 @@ public class Section {
     @Override
     public String toString() {
         return "[" + id + ": " + name + "]";
+    }
+
+
+    public String getPhrase() {
+        return phrase;
+    }
+
+
+    public void setPhrase(String phrase) {
+        this.phrase = phrase;
     }
 }

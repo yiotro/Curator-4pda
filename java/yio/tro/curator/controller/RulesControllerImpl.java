@@ -34,8 +34,8 @@ public class RulesControllerImpl implements RulesController {
 
 
     @Override
-    public void addSection(String name) {
-        rulesModel.addSection(name);
+    public void addSection(String name, String phrase) {
+        rulesModel.addSection(name, phrase);
     }
 
 

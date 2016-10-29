@@ -78,6 +78,12 @@ public class RulesParser {
                 continue;
             }
 
+            // section phrase
+            if (line.length() > 6 && line.substring(0, 6).equals("phrase")) {
+                model.currentSection.setPhrase(line.substring(7));
+                continue;
+            }
+
             if (stringBuilder.length() > 0) stringBuilder.append("\n");
             stringBuilder.append(line);
         }
@@ -140,7 +146,7 @@ public class RulesParser {
             String firstLine = container.strings.get(0);
             firstLine = firstLine.substring(findIndexOfFirstNotSpaceSymbol(firstLine));
             String sectionName = firstLine.substring(firstLine.indexOf(' '));
-            model.addSection(sectionName); // create section
+            model.addSection(sectionName, ""); // create section
 
             // remove first line with section name
             ListIterator<String> stringListIterator = container.strings.listIterator();

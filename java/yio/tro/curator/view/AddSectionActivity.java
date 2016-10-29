@@ -47,7 +47,10 @@ public class AddSectionActivity extends AppCompatActivity {
         EditText editName = (EditText) findViewById(R.id.add_section_edit_name);
         String name = editName.getEditableText().toString();
 
-        RulesControllerImpl.getInstance().addSection(name);
+        EditText editPhrase = (EditText) findViewById(R.id.add_section_edit_phrase);
+        String phrase = editPhrase.getText().toString();
+
+        RulesControllerImpl.getInstance().addSection(name, phrase);
 
         finish();
     }

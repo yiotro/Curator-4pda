@@ -156,6 +156,8 @@
     <string name="cant_get_data_from_clipboard">Can\'t get data from clipboard</string>
     <string name="imported_full_base">Imported full base</string>
     <string name="rule_tag">Tag</string>
+    <string name="tag_on_separate_line">Tag on separate line</string>
+    <string name="welcome_phrase_optional">Welcome phrase (optional)</string>
     <string-array name="list_look_entries">
         <item>Default</item>
         <item>Compact</item>

@@ -30,4 +30,22 @@
             android:layout_centerHorizontal="true"
             android:inputType="text"/>
 
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/welcome_phrase_optional"
+            android:id="@+id/add_section_phrase_view"
+            android:layout_below="@+id/add_section_edit_name"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="70dp"/>
+
+    <EditText
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/add_section_edit_phrase"
+            android:singleLine="true"
+            android:layout_below="@+id/add_section_phrase_view"
+            android:layout_centerHorizontal="true"/>
+
 </RelativeLayout>

@@ -28,4 +28,9 @@
             android:title="@string/tag"
             android:defaultValue="@string/default_tag"/>
 
+    <CheckBoxPreference
+            android:key="general_pref_tag_on_separate_line"
+            android:title="@string/tag_on_separate_line"
+            android:defaultValue="true"/>
+
 </PreferenceScreen>

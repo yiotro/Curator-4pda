@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public interface RulesController extends RulesModelListener {
 
 
-    void addSection(String name);
+    void addSection(String name, String phrase);
 
 
     void deleteSection();

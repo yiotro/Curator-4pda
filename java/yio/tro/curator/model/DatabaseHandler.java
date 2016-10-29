@@ -11,12 +11,13 @@ import java.util.ArrayList;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 14;
+    private static final int DATABASE_VERSION = 15;
     private static final String DATABASE_NAME = "curator.db";
     public static final String TABLE_SECTIONS = "sections";
     public static final String TABLE_RULES = "rules";
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_SECTION_NAME = "_name";
+    public static final String COLUMN_SECTION_PHRASE = "_phrase";
     public static final String COLUMN_RULE_TITLE = "_title";
     public static final String COLUMN_RULE_TEXT = "_text";
     public static final String COLUMN_RULE_TAG = "_tag";
@@ -34,6 +35,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(COLUMN_ID, section.getId());
         values.put(COLUMN_SECTION_NAME, section.getName());
+        values.put(COLUMN_SECTION_PHRASE, section.getPhrase());
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLE_SECTIONS, null, values);
 
@@ -114,6 +116,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         while (!c.isAfterLast()) {
             Section section = new Section(c.getInt(c.getColumnIndex(COLUMN_ID)));
             section.setName(c.getString(c.getColumnIndex(COLUMN_SECTION_NAME)));
+            section.setPhrase(c.getString(c.getColumnIndex(COLUMN_SECTION_PHRASE)));
             result.add(section);
             c.moveToNext();
         }
@@ -152,7 +155,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         String queryCreateSections = "create table " + TABLE_SECTIONS + "(" +
                 COLUMN_ID + " integer primary key autoincrement," +
-                COLUMN_SECTION_NAME + " text" +
+                COLUMN_SECTION_NAME + " text," +
+                COLUMN_SECTION_PHRASE + " text" +
                 ");";
         db.execSQL(queryCreateSections);
     }

@@ -96,7 +96,7 @@ public class RulesModel {
      */
     private void checkToCreateDefaultRules(Context context) {
         if (sections.size() == 0) {
-            addSection(context.getString(R.string.main_rules));
+            addSection(context.getString(R.string.main_rules), "");
             currentSection = sections.get(0);
 
             RulesParser rulesParser = new RulesParser(this);
@@ -111,11 +111,12 @@ public class RulesModel {
      * @param name name of new section
      * @return newly created section
      */
-    public Section addSection(String name) {
+    public Section addSection(String name, String phrase) {
         if (name.length() == 0) return null;
 
         Section section = new Section(getIdForNewSection());
         section.setName(name);
+        section.setPhrase(phrase);
 
         ListIterator<Section> iterator = sections.listIterator();
         while (iterator.hasNext()) iterator.next();
@@ -293,12 +294,15 @@ public class RulesModel {
 
 
     private void endBuildClipData(Context context, SharedPreferences defaultSharedPreferences, StringBuilder stringBuilder, String customTag) {
-        stringBuilder.append("[/size]").append("\n");
+        String textSize = defaultSharedPreferences.getString("general_pref_text_size", "1");
+        if (textSize.length() > 0) {
+            stringBuilder.append("[/size]");
+        }
 
         // add ending phrase
         String endingPhrase = defaultSharedPreferences.getString("general_pref_ending_phrase", context.getResources().getString(R.string.default_ending_phrase));
         if (endingPhrase.length() > 0) {
-            stringBuilder.append(endingPhrase).append("\n");
+            stringBuilder.append("\n").append(endingPhrase);
         }
 
         // final tag
@@ -307,7 +311,10 @@ public class RulesModel {
             tag = customTag;
         }
         if (tag.length() > 0) {
-            stringBuilder.append("[/").append(tag).append("]\n");
+            if (defaultSharedPreferences.getBoolean("general_pref_tag_on_separate_line", true)) {
+                stringBuilder.append("\n");
+            }
+            stringBuilder.append("[/").append(tag).append("]");
         }
     }
 
@@ -318,17 +325,31 @@ public class RulesModel {
             tag = customTag;
         }
         if (tag.length() > 0) {
-            stringBuilder.append("[").append(tag).append("]\n");
+            stringBuilder.append("[").append(tag).append("]");
+            if (defaultSharedPreferences.getBoolean("general_pref_tag_on_separate_line", true)) {
+                stringBuilder.append("\n");
+            }
         }
 
         // add welcome phrase
-        String welcomePhrase = defaultSharedPreferences.getString("general_pref_welcome_phrase", context.getResources().getString(R.string.default_welcome_phrase));
+        String welcomePhrase = getWelcomePhrase(context, defaultSharedPreferences);
         if (welcomePhrase.length() > 0) {
             stringBuilder.append(welcomePhrase).append("\n");
         }
 
         String textSize = defaultSharedPreferences.getString("general_pref_text_size", "1");
-        stringBuilder.append("[size=").append(textSize).append("]");
+        if (textSize.length() > 0) {
+            stringBuilder.append("[size=").append(textSize).append("]");
+        }
+    }
+
+
+    private String getWelcomePhrase(Context context, SharedPreferences preferences) {
+        String welcomePhrase = preferences.getString("general_pref_welcome_phrase", context.getResources().getString(R.string.default_welcome_phrase));
+        if (currentSection.getPhrase().length() > 0) {
+            welcomePhrase = currentSection.getPhrase();
+        }
+        return welcomePhrase;
     }
 
 
@@ -346,8 +367,11 @@ public class RulesModel {
 
         beginBuildClipData(context, defaultSharedPreferences, stringBuilder, null);
 
-        for (Rule rule : rules) {
-            stringBuilder.append(rule.getText()).append("\n");
+        for (int i = 0; i < rules.size(); i++) {
+            stringBuilder.append(rules.get(i).getText());
+            if (i != rules.size() - 1) {
+                stringBuilder.append("\n");
+            }
         }
 
         endBuildClipData(context, defaultSharedPreferences, stringBuilder, null);
@@ -401,6 +425,10 @@ public class RulesModel {
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append("[formatted]\n");
+
+        if (section.getPhrase().length() > 0) {
+            stringBuilder.append("phrase ").append(section.getPhrase()).append("\n");
+        }
 
         section.sortRules();
         for (Rule rule : section.getRules()) {

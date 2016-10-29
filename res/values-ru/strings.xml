@@ -154,6 +154,8 @@
     <string name="cant_get_data_from_clipboard">Не удается получить данные из буфера обмена</string>
     <string name="imported_full_base">Вся база импортирована</string>
     <string name="rule_tag">Тэг (опционально)</string>
+    <string name="tag_on_separate_line">Тэг на отдельной линии</string>
+    <string name="welcome_phrase_optional">Начальная фраза (опционально)</string>
     <string-array name="list_look_entries">
         <item>По умолчанию</item>
         <item>Компактный</item>
